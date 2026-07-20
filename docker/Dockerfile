@@ -16,8 +16,7 @@ RUN python3 -m pip install --upgrade pip && \
     mkdir -p /workspace && \
     chmod 777 /workspace
 
-# 3. wandb key（安全实践）
-ENV WANDB_API_KEY=$WANDB_API_KEY # 将wandb key粘贴在这里作为环境变量
+# 3. wandb 在运行容器时通过环境变量传入 WANDB_API_KEY，不写入镜像层。
 
 # 4. 克隆OLMo代码
 WORKDIR /workspace
@@ -26,11 +25,8 @@ RUN git clone https://github.com/allenai/OLMo.git && cd OLMo && git checkout mai
 # 5. 安装项目依赖（分步操作便于缓存）
 WORKDIR /workspace/OLMo
 
-# 5.1 安装wandb并登录（仅在API_KEY存在时）
-RUN if [ -n "$WANDB_API_KEY" ]; then \
-        pip install wandb && \
-        wandb login --relogin $WANDB_API_KEY; \
-fi
+# 5.1 安装wandb；认证信息应在运行容器时提供，避免写入镜像。
+RUN pip install wandb
 
 # 5.2 安装包 指定torch版本
 RUN pip install -e ".[all]" torch==2.6.0 -f https://download.pytorch.org/whl/torch_stable.html
