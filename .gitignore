@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.token
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local Codex project memory
+AGENTS.md
+
+# Logs
+*.log
+logs/
+
+# Local data and model artifacts
+data/
+datasets/
+raw_data/
+processed_data/
+outputs/
+results/
+runs/
+wandb/
+mlruns/
+tensorboard/
+checkpoints/
+ckpts/
+models/
+artifacts/
+
+# Large ML files
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+*.gguf
+*.ckpt
+*.arrow
+*.parquet
+*.npy
+*.npz
+
+# Temporary files
+tmp/
+temp/
+*.tmp
