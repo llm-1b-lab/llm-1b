@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. 配置 pip 清华镜像源
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 2. pip 使用默认 PyPI 源（CI 在海外，国内镜像反而慢）
 
 # 3. 升级pip并设置工作目录
 RUN python3 -m pip install --upgrade pip && \
