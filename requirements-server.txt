@@ -1,0 +1,8 @@
+# ============================================================
+# llm-1b 服务器端依赖（需要内网环境访问 Nexus）
+# 安装方式：
+#   python3 -m pip install --extra-index-url https://nexus.zhejianglab.com/repository/pypi_hosted/simple -r requirements-server.txt
+# ============================================================
+
+# 海纳数据平台 SDK（数据下载，仅内网 Nexus 可用）
+haina-datahub==0.0.33

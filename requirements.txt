@@ -8,11 +8,13 @@
 # Dolma 语料处理工具（tokenization）
 dolma==1.2.1
 
-# 海纳数据平台 SDK（数据下载）
-haina-datahub==0.0.33
-
 # 数值计算
 numpy==1.22.2
 
 # HuggingFace Transformers（tokenizer 加载）
 transformers==4.41.0
+
+# ============================================================
+# 以下依赖仅在 K8s 服务器上手动安装（需要内网环境）：
+#   python3 -m pip install -r requirements-server.txt
+# ============================================================
