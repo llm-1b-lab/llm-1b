@@ -10,3 +10,9 @@ dolma==1.2.1
 
 # 海纳数据平台 SDK（数据下载）
 haina-datahub==0.0.33
+
+# 数值计算
+numpy==1.22.2
+
+# HuggingFace Transformers（tokenizer 加载）
+transformers==4.41.0

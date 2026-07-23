@@ -279,6 +279,39 @@ def decode_sample(npy_path: str, n_tokens: int = 80) -> str:
     return text
 
 
+def count_tokens(output_base: str) -> dict:
+    """
+    统计每个 source 目录下的 token 总量。
+
+    Args:
+        output_base: tokenized 输出根目录
+
+    Returns:
+        {source_name: token_count} 字典，含 "TOTAL" 汇总键
+    """
+    import glob
+
+    result = {}
+    total_all = 0
+
+    for d in sorted(glob.glob(os.path.join(output_base, "*"))):
+        files = glob.glob(os.path.join(d, "*.npy"))
+        tokens = 0
+        for f in files:
+            sz = os.path.getsize(f)
+            if sz % 4 != 0:
+                logger.warning(f"字节数不是4的倍数: {f}")
+            tokens += sz // 4
+        total_all += tokens
+        name = os.path.basename(d)
+        result[name] = tokens
+        logger.info(f"{name:18s} {tokens / 1e9:7.2f}B tokens  ({len(files)} shards)")
+
+    result["TOTAL"] = total_all
+    logger.info(f"{'TOTAL':18s} {total_all / 1e9:7.2f}B tokens")
+    return result
+
+
 def _parse_token_count(token_str: str) -> int | None:
     """解析 dolma 输出的 token 计数字符串，如 '1.5Gt' -> 1500000000"""
     import re
