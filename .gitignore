@@ -40,11 +40,11 @@ AGENTS.md
 *.log
 logs/
 
-# Local data and model artifacts
-data/
-datasets/
-raw_data/
-processed_data/
+# Local data and model artifacts (仅匹配项目根目录)
+/data/
+/datasets/
+/raw_data/
+/processed_data/
 outputs/
 results/
 runs/
