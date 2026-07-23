@@ -9,27 +9,23 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 2. 配置 pip：主源用清华镜像，海纳SDK 用私有 Nexus 源
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip config set global.extra-index-url https://nexus.zhejianglab.com/repository/pypi_hosted/simple
 
-# 2. 升级pip并设置工作目录
+# 3. 升级pip并设置工作目录
 RUN python3 -m pip install --upgrade pip && \
     mkdir -p /workspace && \
     chmod 777 /workspace
 
-# 3. wandb 在运行容器时通过环境变量传入 WANDB_API_KEY，不写入镜像层。
-
-# 4. 克隆OLMo代码
+# 4. 复制项目代码并安装依赖
 WORKDIR /workspace
-RUN git clone https://github.com/allenai/OLMo.git && cd OLMo && git checkout main
+COPY requirements.txt /workspace/requirements.txt
+RUN python3 -m pip install -r requirements.txt
 
-# 5. 安装项目依赖（分步操作便于缓存）
-WORKDIR /workspace/OLMo
+COPY src/ /workspace/src/
 
-# 5.1 安装wandb；认证信息应在运行容器时提供，避免写入镜像。
-RUN pip install wandb
-
-# 5.2 安装包 指定torch版本
-RUN pip install -e ".[all]" torch==2.6.0 -f https://download.pytorch.org/whl/torch_stable.html
+# 5. wandb 在运行容器时通过环境变量传入 WANDB_API_KEY，不写入镜像层。
 
 # 6. 验证环境
 RUN python3 -c "\
@@ -42,9 +38,6 @@ RUN sleep 10
 # 7. 清理缓存（减小镜像体积）
 RUN rm -rf /root/.cache/pip && \
     find /usr -name '__pycache__' -exec rm -rf {} +
-
-# (可选)创建日期
-# RUN echo 'Rebuild at Tue Apr 29 19:10:10 CST 2025' > /build_time
 
 # 8. 容器启动命令
 CMD ["/bin/bash"]
