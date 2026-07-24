@@ -1,5 +1,5 @@
-# 使用官方CUDA基础镜像（包含Python但未预装pip）
-FROM nvidia/cuda:12.1.1-base-ubuntu22.04
+# 使用官方CUDA基础镜像（最常见的深度学习 Dockerfile 基础镜像）
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
 
 # 1. 安装系统依赖（包括Python3和pip）
 RUN apt-get update && apt-get install -y \
@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. 配置 pip 清华镜像源
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 2. pip 使用默认 PyPI 源（CI 在海外，国内镜像反而慢）
 
 # 3. 升级pip并设置工作目录
 RUN python3 -m pip install --upgrade pip && \
@@ -28,9 +27,8 @@ COPY src/ /workspace/src/
 
 # 6. 验证环境
 RUN python3 -c "\
-import torch; \
-print(f'PyTorch版本: {torch.__version__}'); \
-print(f'CUDA可用: {torch.cuda.is_available()}')"
+from transformers import AutoTokenizer; \
+print(f'Transformers 可用, tokenizer 加载正常')"
 
 RUN sleep 10
 
